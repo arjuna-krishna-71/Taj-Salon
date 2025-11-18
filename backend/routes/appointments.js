@@ -1,28 +1,45 @@
-const express = require('express');
-const router = express.Router();
-const Appointment = require('../models/Booking');
+import express from "express";
+import Booking from "../models/Booking.js";  // Correct model
 
-// Book appointment
-router.post('/', async (req, res) => {
+const router = express.Router();
+
+// ------------------- CREATE APPOINTMENT -------------------
+router.post("/", async (req, res) => {
   try {
     const { name, email, date, time, service, notes } = req.body;
-    const booking = new Booking({ name, email, date, time, service, notes });
+
+    const booking = new Booking({
+      name,
+      email,
+      date,
+      time,
+      service,
+      notes,
+    });
+
     await booking.save();
-    res.status(201).json({ message: 'Appointment booked successfully!' });
+
+    res.status(201).json({
+      message: "Appointment booked successfully!",
+      booking,
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Booking failed', error: err.message });
+    console.error("Booking Error:", err);
+    res.status(500).json({
+      message: "Booking failed",
+      error: err.message,
+    });
   }
 });
 
-// Get all appointments for a customer
-router.get('/:customerId', async (req, res) => {
+// ------------------- GET ALL BOOKINGS -------------------
+router.get("/", async (req, res) => {
   try {
-    const appointments = await Appointment.find({ customer: req.params.customerId });
-    res.json(appointments);
+    const bookings = await Booking.find().sort({ createdAt: -1 });
+    res.json(bookings);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 });
 
-module.exports = router;
+export default router;
