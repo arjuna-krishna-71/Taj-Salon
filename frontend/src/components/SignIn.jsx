@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom"; 
 import "../taj.css"; 
 
 export default function SignInForm({ setIsSignedIn}) {
@@ -43,10 +44,12 @@ export default function SignInForm({ setIsSignedIn}) {
             onChange={handleChange}
             required
           />
-          <button type="submit">Sign In</button>
+          <button type="submit">Sign In</button> 
+        <p>Do you have an account?</p><Link to="/signup">Sign Up</Link>
         </form>
         {message && <p className="message">{message}</p>}
       </div>
+          
     </div>
   );
 }
